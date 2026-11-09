@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>sview.ico</file>
+        <file>sview_alt1.ico</file>
+        <file>sview_alt2.ico</file>
+        <file>icons/menu.png</file>
+        <file>icons/prev_file.png</file>
+        <file>icons/next_file.png</file>
+        <file>icons/flip_h.png</file>
+        <file>icons/flip_v.png</file>
+        <file>icons/pivot.png</file>
+        <file>icons/mode_360.png</file>
+        <file alias="menu.png">icons/menu.png</file>
+        <file alias="prev_file.png">icons/prev_file.png</file>
+        <file alias="next_file.png">icons/next_file.png</file>
+        <file alias="flip_h.png">icons/flip_h.png</file>
+        <file alias="flip_v.png">icons/flip_v.png</file>
+        <file alias="pivot.png">icons/pivot.png</file>
+        <file alias="mode_360.png">icons/mode_360.png</file>
+        <file>icons/menu.svg</file>
+        <file>icons/prev_file.svg</file>
+        <file>icons/next_file.svg</file>
+        <file>icons/flip_h.svg</file>
+        <file>icons/flip_v.svg</file>
+        <file>icons/pivot.svg</file>
+        <file>icons/mode_360.svg</file>
+        <file alias="menu.svg">icons/menu.svg</file>
+        <file alias="prev_file.svg">icons/prev_file.svg</file>
+        <file alias="next_file.svg">icons/next_file.svg</file>
+        <file alias="flip_h.svg">icons/flip_h.svg</file>
+        <file alias="flip_v.svg">icons/flip_v.svg</file>
+        <file alias="pivot.svg">icons/pivot.svg</file>
+        <file alias="mode_360.svg">icons/mode_360.svg</file>
+    </qresource>
+</RCC>

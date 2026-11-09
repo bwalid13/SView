@@ -1,0 +1,67 @@
+<RCC>
+    <qresource prefix="/themes">
+        <!-- Stylesheets -->
+        <file>themes/usdview.qss</file>
+        <file>themes/maya.qss</file>
+        <file>themes/blender.qss</file>
+        <file>themes/nuke.qss</file>
+        <file>themes/houdini.qss</file>
+        <file>themes/3dsmax.qss</file>
+
+        <!-- Theme Control Image Assets -->
+        <file>themes/images/arrow_down.png</file>
+        <file>themes/images/arrow_down_disabled.png</file>
+        <file>themes/images/arrow_left.png</file>
+        <file>themes/images/arrow_left_disabled.png</file>
+        <file>themes/images/arrow_right.png</file>
+        <file>themes/images/arrow_right_disabled.png</file>
+        <file>themes/images/arrow_up.png</file>
+        <file>themes/images/arrow_up_disabled.png</file>
+        <file>themes/images/branch-closed-selected.png</file>
+        <file>themes/images/branch-closed.png</file>
+        <file>themes/images/branch-open-selected.png</file>
+        <file>themes/images/branch-open.png</file>
+        <file>themes/images/branch_closed.png</file>
+        <file>themes/images/branch_closed_selected.png</file>
+        <file>themes/images/branch_open.png</file>
+        <file>themes/images/branch_open_selected.png</file>
+        <file>themes/images/checkbox_checked.png</file>
+        <file>themes/images/checkbox_checked_disabled.png</file>
+        <file>themes/images/checkbox_indeterminate.png</file>
+        <file>themes/images/checkbox_unchecked.png</file>
+        <file>themes/images/checkbox_unchecked_disabled.png</file>
+        <file>themes/images/close.png</file>
+        <file>themes/images/float.png</file>
+        <file>themes/images/radio_checked.png</file>
+        <file>themes/images/radio_checked_disabled.png</file>
+        <file>themes/images/radio_unchecked.png</file>
+        <file>themes/images/radio_unchecked_disabled.png</file>
+        <file>themes/images/restore.png</file>
+        <file>themes/images/right-arrow-disabled.png</file>
+        <file>themes/images/right-arrow.png</file>
+        <file>themes/images/right_arrow.png</file>
+        <file>themes/images/right_arrow_disabled.png</file>
+        <file>themes/images/scrollbar_arrow_down.png</file>
+        <file>themes/images/scrollbar_arrow_down_disabled.png</file>
+        <file>themes/images/scrollbar_arrow_left.png</file>
+        <file>themes/images/scrollbar_arrow_left_disabled.png</file>
+        <file>themes/images/scrollbar_arrow_right.png</file>
+        <file>themes/images/scrollbar_arrow_right_disabled.png</file>
+        <file>themes/images/scrollbar_arrow_up.png</file>
+        <file>themes/images/scrollbar_arrow_up_disabled.png</file>
+        <file>themes/images/usd-attr-plain-icon.png</file>
+        <file>themes/images/usd-attr-with-conn-icon.png</file>
+        <file>themes/images/usd-cmp-icon.png</file>
+        <file>themes/images/usd-conn-icon.png</file>
+        <file>themes/images/usd-rel-plain-icon.png</file>
+        <file>themes/images/usd-rel-with-target-icon.png</file>
+        <file>themes/images/usd-target-icon.png</file>
+        <file>themes/images/usd_attr_plain_icon.png</file>
+        <file>themes/images/usd_attr_with_conn_icon.png</file>
+        <file>themes/images/usd_cmp_icon.png</file>
+        <file>themes/images/usd_conn_icon.png</file>
+        <file>themes/images/usd_rel_plain_icon.png</file>
+        <file>themes/images/usd_rel_with_target_icon.png</file>
+        <file>themes/images/usd_target_icon.png</file>
+    </qresource>
+</RCC>

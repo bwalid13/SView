@@ -1,0 +1,480 @@
+/* =============================================================================
+ * Sview Authentic VFX DCC Stylesheet: Autodesk 3ds Max
+ * =============================================================================
+ * Command Panel 3D tactile dual-tone bevels (#545454 top-left / #1f1f1f bottom-right),
+ * slate surfaces (#303030 / #282828 / #1e1e1e), and signature 3ds Max Cyan accents (#00a2e8).
+ */
+
+/* Global Typography & Base Geometry */
+QWidget {
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: #e0e0e0;
+    background-color: #303030;
+    selection-background-color: #00a2e8;
+    selection-color: #ffffff;
+    border-radius: 2px;
+}
+
+QWidget:disabled {
+    color: #707070;
+}
+
+QMainWindow, QDialog {
+    background-color: #303030;
+    color: #e0e0e0;
+}
+
+/* Status Bar */
+QStatusBar {
+    background-color: #282828;
+    color: #00a2e8;
+    border-top: 1px solid #1c1c1c;
+}
+
+/* Menu Bar & Menus */
+QMenuBar {
+    background-color: #282828;
+    color: #e0e0e0;
+    border-bottom: 1px solid #1c1c1c;
+    padding: 2px 4px;
+    font-size: 13px;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 8px;
+    border-radius: 2px;
+    color: #e0e0e0;
+}
+
+QMenuBar::item:selected {
+    background-color: #00a2e8;
+    color: #ffffff;
+}
+
+QMenuBar::item:pressed {
+    background-color: #0077b3;
+    color: #ffffff;
+}
+
+QMenu {
+    background-color: #282828;
+    color: #e0e0e0;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+    padding: 3px 0;
+    font-size: 13px;
+}
+
+QMenu::item {
+    padding: 5px 24px 5px 18px;
+    border-radius: 2px;
+}
+
+QMenu::item:selected {
+    background-color: #00a2e8;
+    color: #ffffff;
+}
+
+QMenu::item:disabled {
+    color: #707070;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: #404040;
+    margin: 4px 6px;
+}
+
+/* ToolBars & Modern Scale ToolButtons */
+QToolBar {
+    background-color: #282828;
+    border: 1px solid #1f1f1f;
+    spacing: 3px;
+    padding: 2px;
+}
+
+QToolButton {
+    background-color: #383838;
+    color: #e0e0e0;
+    border-top: 1px solid #545454;
+    border-left: 1px solid #545454;
+    border-right: 1px solid #1f1f1f;
+    border-bottom: 1px solid #1f1f1f;
+    border-radius: 2px;
+    min-width: 28px;
+    min-height: 28px;
+    padding: 3px 6px;
+    qproperty-iconSize: 20px 20px;
+}
+
+QToolButton:hover {
+    background-color: #444444;
+    border-color: #00a2e8;
+    color: #ffffff;
+}
+
+QToolButton:pressed, QToolButton:checked {
+    background-color: #262626;
+    border-top: 1px solid #1f1f1f;
+    border-left: 1px solid #1f1f1f;
+    border-right: 1px solid #545454;
+    border-bottom: 1px solid #545454;
+    color: #00a2e8;
+}
+
+/* PushButtons (3ds Max Command Panel 3D Dual-Tone Bevel) */
+QPushButton {
+    background-color: #383838;
+    color: #e0e0e0;
+    border-top: 1px solid #545454;
+    border-left: 1px solid #545454;
+    border-right: 1px solid #1f1f1f;
+    border-bottom: 1px solid #1f1f1f;
+    border-radius: 2px;
+    padding: 4px 12px;
+    min-height: 22px;
+    font-size: 13px;
+}
+
+QPushButton:hover {
+    background-color: #444444;
+    border-top: 1px solid #686868;
+    border-left: 1px solid #686868;
+    border-color: #00a2e8;
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: #262626;
+    border-top: 1px solid #1f1f1f;
+    border-left: 1px solid #1f1f1f;
+    border-right: 1px solid #545454;
+    border-bottom: 1px solid #545454;
+    color: #ffffff;
+}
+
+QPushButton:checked {
+    background-color: #00a2e8;
+    color: #ffffff;
+    border: 1px solid #0077b3;
+}
+
+QPushButton:disabled {
+    background-color: #2c2c2c;
+    color: #707070;
+    border: 1px solid #222222;
+}
+
+/* Input Fields (3ds Max Sunken Well #1e1e1e) */
+QLineEdit {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #1a1a1a;
+    border-top: 1px solid #141414;
+    border-left: 1px solid #141414;
+    border-radius: 2px;
+    padding: 3px 6px;
+    min-height: 20px;
+    font-size: 13px;
+}
+
+QLineEdit:focus {
+    border: 1px solid #00a2e8;
+    color: #ffffff;
+}
+
+QAbstractSpinBox, QSpinBox, QDoubleSpinBox {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #1a1a1a;
+    border-top: 1px solid #141414;
+    border-left: 1px solid #141414;
+    border-radius: 2px;
+    padding: 2px 4px;
+    min-height: 20px;
+}
+
+QAbstractSpinBox:focus, QSpinBox:focus, QDoubleSpinBox:focus {
+    border-color: #00a2e8;
+}
+
+QAbstractSpinBox::up-button, QAbstractSpinBox::down-button,
+QSpinBox::up-button, QSpinBox::down-button,
+QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+    background-color: #383838;
+    border: 1px solid #222222;
+    border-radius: 1px;
+    width: 16px;
+}
+
+QAbstractSpinBox::up-button:hover, QAbstractSpinBox::down-button:hover,
+QSpinBox::up-button:hover, QSpinBox::down-button:hover,
+QDoubleSpinBox::up-button:hover, QDoubleSpinBox::down-button:hover {
+    background-color: #444444;
+    border-color: #00a2e8;
+}
+
+QAbstractSpinBox::up-arrow, QSpinBox::up-arrow, QDoubleSpinBox::up-arrow {
+    image: url(:/themes/themes/images/arrow_up.png);
+    width: 8px;
+    height: 8px;
+}
+
+QAbstractSpinBox::down-arrow, QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {
+    image: url(:/themes/themes/images/arrow_down.png);
+    width: 8px;
+    height: 8px;
+}
+
+/* ComboBoxes */
+QComboBox {
+    background-color: #383838;
+    color: #e0e0e0;
+    border-top: 1px solid #545454;
+    border-left: 1px solid #545454;
+    border-right: 1px solid #1f1f1f;
+    border-bottom: 1px solid #1f1f1f;
+    border-radius: 2px;
+    padding: 3px 20px 3px 8px;
+    min-height: 20px;
+    font-size: 13px;
+}
+
+QComboBox:hover {
+    border-color: #00a2e8;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 18px;
+    border-left: 1px solid #222222;
+}
+
+QComboBox::down-arrow {
+    image: url(:/themes/themes/images/arrow_down.png);
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #282828;
+    color: #e0e0e0;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+    selection-background-color: #00a2e8;
+    selection-color: #ffffff;
+    padding: 2px;
+}
+
+/* GroupBox */
+QGroupBox {
+    border: 1px solid #444444;
+    border-radius: 2px;
+    margin-top: 1.5ex;
+    font-weight: bold;
+    padding: 8px;
+}
+
+QGroupBox::title {
+    subcontrol-position: top left;
+    subcontrol-origin: margin;
+    left: 8px;
+    padding: 0 4px;
+    color: #00a2e8;
+}
+
+/* TabWidget & TabBar */
+QTabWidget::pane {
+    border: 1px solid #1f1f1f;
+    background-color: #282828;
+    border-radius: 2px;
+}
+
+QTabBar::tab {
+    background-color: #262626;
+    color: #8c8c8c;
+    border: 1px solid #1f1f1f;
+    border-bottom: none;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    padding: 4px 10px;
+    margin-right: 2px;
+    min-height: 18px;
+    font-size: 11px;
+}
+
+QTabBar::tab:hover {
+    background-color: #383838;
+    color: #ffffff;
+}
+
+QTabBar::tab:selected {
+    background-color: #383838;
+    color: #ffffff;
+    border-top: 2px solid #00a2e8;
+    font-weight: bold;
+}
+
+/* QScrollBar (3ds Max 12px Bar) */
+QScrollBar:horizontal {
+    background-color: #1e1e1e;
+    border: 1px solid #181818;
+    border-radius: 2px;
+    height: 12px;
+    margin: 0px;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #404040;
+    border: 1px solid #282828;
+    border-radius: 2px;
+    min-width: 30px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: #4c4c4c;
+    border-color: #00a2e8;
+}
+
+QScrollBar:vertical {
+    background-color: #1e1e1e;
+    border: 1px solid #181818;
+    border-radius: 2px;
+    width: 12px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #404040;
+    border: 1px solid #282828;
+    border-radius: 2px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #4c4c4c;
+    border-color: #00a2e8;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: transparent;
+    border: none;
+    width: 0px;
+    height: 0px;
+}
+
+/* QSlider (3ds Max Cyan Scrubber) */
+QSlider::groove:horizontal {
+    height: 5px;
+    background-color: #1a1a1a;
+    border: 1px solid #141414;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal {
+    background-color: #00a2e8;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #d8d8d8;
+    border: 1px solid #141414;
+    width: 12px;
+    height: 14px;
+    margin: -5px 0;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #00a2e8;
+    border-color: #ffffff;
+}
+
+/* CheckBox & RadioButton */
+QCheckBox, QRadioButton {
+    spacing: 6px;
+    color: #e0e0e0;
+    font-size: 13px;
+}
+
+QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+    image: url(:/themes/themes/images/checkbox_unchecked.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/themes/themes/images/checkbox_checked.png);
+}
+
+QCheckBox::indicator:disabled {
+    image: url(:/themes/themes/images/checkbox_unchecked_disabled.png);
+}
+
+QCheckBox::indicator:checked:disabled {
+    image: url(:/themes/themes/images/checkbox_checked_disabled.png);
+}
+
+QRadioButton::indicator {
+    width: 13px;
+    height: 13px;
+    image: url(:/themes/themes/images/radio_unchecked.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/themes/themes/images/radio_checked.png);
+}
+
+QRadioButton::indicator:disabled {
+    image: url(:/themes/themes/images/radio_unchecked_disabled.png);
+}
+
+QRadioButton::indicator:checked:disabled {
+    image: url(:/themes/themes/images/radio_checked_disabled.png);
+}
+
+/* TreeView, TableView, ListView & Branch Indicators */
+QTreeView, QTableView, QListView {
+    background-color: #1e1e1e;
+    alternate-background-color: #262626;
+    color: #e0e0e0;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+    selection-background-color: #00a2e8;
+    selection-color: #ffffff;
+    font-size: 13px;
+}
+
+QHeaderView::section {
+    background-color: #282828;
+    color: #8c8c8c;
+    padding: 4px;
+    border: 1px solid #1f1f1f;
+    border-radius: 1px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+    image: url(:/themes/themes/images/branch_closed.png);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings {
+    image: url(:/themes/themes/images/branch_open.png);
+}
+
+/* ToolTip */
+QToolTip {
+    background-color: #282828;
+    color: #ffffff;
+    border: 1px solid #00a2e8;
+    border-radius: 2px;
+    padding: 4px 8px;
+    font-size: 12px;
+}

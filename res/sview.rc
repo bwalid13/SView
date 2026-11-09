@@ -1,0 +1,7 @@
+#define IDI_ICON1 101
+#define IDI_ICON2 102
+#define IDI_ICON3 103
+
+IDI_ICON1               ICON    DISCARDABLE     "sview.ico"
+IDI_ICON2               ICON    DISCARDABLE     "sview_alt1.ico"
+IDI_ICON3               ICON    DISCARDABLE     "sview_alt2.ico"
