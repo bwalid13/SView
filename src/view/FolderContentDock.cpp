@@ -1,5 +1,6 @@
 #include "FolderContentDock.h"
 #include "../model/FolderModel.h"
+#include "../model/ImageLoader.h"
 #include "../viewmodel/ViewerViewModel.h"
 
 #include <QApplication>
@@ -54,23 +55,74 @@ void FolderContentDock::showEvent(QShowEvent* event)
 QImage FolderContentDock::decodeThumbnail(const QString& path, int targetSize)
 {
     QImageReader reader(path);
-    if (!reader.canRead()) {
+    if (reader.canRead()) {
+        reader.setAutoTransform(true);
+        // Les formats qui savent décoder à l'échelle (JPEG, WebP) évitent de
+        // décoder l'image pleine résolution ; les autres sont rééchantillonnés
+        // par Qt après décodage.
+        reader.setScaledSize(QSize(targetSize, targetSize));
+        QImage image = reader.read();
+        if (!image.isNull()) {
+            if (image.width() > targetSize || image.height() > targetSize) {
+                image = image.scaled(targetSize, targetSize, Qt::KeepAspectRatio,
+                                     Qt::SmoothTransformation);
+            }
+            return image;
+        }
+    }
+
+    // Repli VFX (EXR, RAT, HDR, DPX, TX, PIC...) via le décodeur Sview/OIIO
+    const QFileInfo fi(path);
+    if (!fi.exists() || fi.size() > 128LL * 1024 * 1024) {
         return QImage();
     }
-    reader.setAutoTransform(true);
-    // Les formats qui savent décoder à l'échelle (JPEG, WebP) évitent de
-    // décoder l'image pleine résolution ; les autres sont rééchantillonnés
-    // par Qt après décodage.
-    reader.setScaledSize(QSize(targetSize, targetSize));
-    QImage image = reader.read();
-    if (image.isNull()) {
+
+    const LoadResult res = loadImage(path);
+    const ImagePtr& img = res.image;
+    if (!img || img->rgba.empty() || img->width <= 0 || img->height <= 0) {
         return QImage();
     }
-    if (image.width() > targetSize || image.height() > targetSize) {
-        image = image.scaled(targetSize, targetSize, Qt::KeepAspectRatio,
-                             Qt::SmoothTransformation);
+
+    int tw = targetSize;
+    int th = targetSize;
+    if (img->width > img->height) {
+        th = std::max(1, int(std::round(float(targetSize) * float(img->height) / float(img->width))));
+    } else if (img->height > img->width) {
+        tw = std::max(1, int(std::round(float(targetSize) * float(img->width) / float(img->height))));
     }
-    return image;
+
+    QImage out(tw, th, QImage::Format_RGBA8888);
+    const bool isLinear = (img->space == SourceSpace::SceneLinear);
+
+    for (int y = 0; y < th; ++y) {
+        const int srcY = std::clamp(int((float(y) + 0.5f) * float(img->height) / float(th)), 0, img->height - 1);
+        uchar* scanline = out.scanLine(y);
+        for (int x = 0; x < tw; ++x) {
+            const int srcX = std::clamp(int((float(x) + 0.5f) * float(img->width) / float(tw)), 0, img->width - 1);
+            const size_t idx = (size_t(srcY) * size_t(img->width) + size_t(srcX)) * 4;
+            float r = img->rgba[idx + 0];
+            float g = img->rgba[idx + 1];
+            float b = img->rgba[idx + 2];
+            float a = img->rgba[idx + 3];
+
+            if (!std::isfinite(r)) r = 0.0f;
+            if (!std::isfinite(g)) g = 0.0f;
+            if (!std::isfinite(b)) b = 0.0f;
+            if (!std::isfinite(a)) a = 1.0f;
+
+            if (isLinear) {
+                r = r > 0.0f ? std::pow(r / (1.0f + r), 1.0f / 2.2f) : 0.0f;
+                g = g > 0.0f ? std::pow(g / (1.0f + g), 1.0f / 2.2f) : 0.0f;
+                b = b > 0.0f ? std::pow(b / (1.0f + b), 1.0f / 2.2f) : 0.0f;
+            }
+
+            scanline[x * 4 + 0] = static_cast<uchar>(std::clamp(r * 255.0f + 0.5f, 0.0f, 255.0f));
+            scanline[x * 4 + 1] = static_cast<uchar>(std::clamp(g * 255.0f + 0.5f, 0.0f, 255.0f));
+            scanline[x * 4 + 2] = static_cast<uchar>(std::clamp(b * 255.0f + 0.5f, 0.0f, 255.0f));
+            scanline[x * 4 + 3] = static_cast<uchar>(std::clamp(a * 255.0f + 0.5f, 0.0f, 255.0f));
+        }
+    }
+    return out;
 }
 
 void FolderContentDock::startThumbnailLoading()

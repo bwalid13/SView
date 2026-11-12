@@ -523,9 +523,14 @@ void ViewerViewModel::openImageB(const QString& path)
     m_targetB = path;
     const LoadResult res = loadImage(path);
     if (res.image) {
+        m_error.clear();
         m_imageB = res.image;
         emit imageBChanged();
         emit displayChanged();
+        emit overlayChanged();
+    } else {
+        m_error = res.error.isEmpty() ? tr("Cannot open Image B") : res.error;
+        emit overlayChanged();
     }
 }
 
@@ -934,11 +939,14 @@ QString ViewerViewModel::overlayText() const
             lines << QStringLiteral("AOV: %1").arg(m_currentAov);
         }
         if (m_wipeEnabled && m_imageB) {
+            const QString modeStr = (m_wipeMode == 0) ? QStringLiteral("Vertical")
+                                  : (m_wipeMode == 1) ? QStringLiteral("Horizontal")
+                                                      : QStringLiteral("Onion Skin");
             lines << QStringLiteral("Wipe: %1 vs %2 (%3% %4)")
                          .arg(QFileInfo(m_image->path).fileName())
                          .arg(QFileInfo(m_imageB->path).fileName())
                          .arg(int(std::round(m_wipePos * 100.0f)))
-                         .arg(m_wipeMode == 0 ? QStringLiteral("Vertical") : QStringLiteral("Horizontal"));
+                         .arg(modeStr);
         }
         if (m_mode360) {
             constexpr float kRadToDeg = 180.0f / 3.14159265f;

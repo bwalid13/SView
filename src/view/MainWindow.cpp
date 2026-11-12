@@ -813,11 +813,17 @@ void MainWindow::copyCurrentPixel()
 void MainWindow::updateWindowTitle()
 {
     QString title = m_vm ? m_vm->windowTitle() : QStringLiteral("SView");
-    if (m_sequence && m_sequence->isSequence()) {
-        title += QStringLiteral(" — [%1..%2] (%3 frames)")
-                     .arg(m_sequence->startFrame())
-                     .arg(m_sequence->endFrame())
-                     .arg(m_sequence->frameCount());
+    if (m_vm && m_vm->image()) {
+        const auto& img = m_vm->image();
+        title += QStringLiteral(" — %1×%2").arg(img->width).arg(img->height);
+        if (!img->formatName.isEmpty()) {
+            title += QStringLiteral(" (%1)").arg(img->formatName);
+        }
+        if (m_vm->hasMultipleFolderImages() && m_vm->folderIndex() >= 0) {
+            title += QStringLiteral(" [%1/%2]")
+                         .arg(m_vm->folderIndex() + 1)
+                         .arg(m_vm->folderCount());
+        }
     }
     setWindowTitle(title);
     if (m_titleBar) {
@@ -1198,9 +1204,12 @@ void MainWindow::handleDroppedFiles(const QStringList& paths)
     // First file is opened as primary
     openFileOrSequence(paths.first());
 
-    // If a second file is provided, open as comparison Image B
+    // If a second file is provided, open as comparison Image B and enable A/B Wipe
     if (paths.size() > 1) {
         m_vm->openImageB(paths[1]);
+        if (m_vm->imageB()) {
+            m_vm->setWipeEnabled(true);
+        }
     }
 
     // Register all dropped files in recent files

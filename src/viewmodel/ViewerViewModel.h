@@ -67,6 +67,7 @@ public:
 
     bool isLoading() const { return m_loading; }
     bool overlayVisible() const { return m_infoVisible || !m_error.isEmpty(); }
+    QString error() const { return m_error; }
     QString overlayText() const;
     QString windowTitle() const;
     QString probeValues() const { return m_probeValues; }

@@ -5,8 +5,10 @@
 #include <DockWidget.h>
 
 #include <QFileInfo>
+#include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QScrollArea>
 #include <QVBoxLayout>
 
 #include <algorithm>
@@ -43,9 +45,21 @@ ads::CDockWidget* AnalysisDock::createDockWidget(ads::CDockManager* dockManager,
 
 void AnalysisDock::setupUi()
 {
-    auto* rootLayout = new QVBoxLayout(this);
+    auto* outerLayout = new QVBoxLayout(this);
+    outerLayout->setContentsMargins(0, 0, 0, 0);
+    outerLayout->setSpacing(0);
+
+    auto* scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    auto* scrollContent = new QWidget(scrollArea);
+    auto* rootLayout = new QVBoxLayout(scrollContent);
     rootLayout->setContentsMargins(10, 10, 10, 10);
-    rootLayout->setSpacing(12);
+    rootLayout->setSpacing(10);
+    scrollArea->setWidget(scrollContent);
+    outerLayout->addWidget(scrollArea);
 
     // =========================================================================
     // 1. Color & Tone (Exposure & Gamma)

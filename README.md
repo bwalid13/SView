@@ -6,15 +6,17 @@ OpenImageIO, OpenColorIO and OpenGL.
 Open a plate, look at it, trust the colors. No project, no asset database, no
 node graph: just the image, at full quality, immediately.
 
+![SView Interface](docs/images/sview_preview.jpg)
+
 ## Features
 
-- **Reads what a VFX pipeline produces** — EXR (multi-part, AOV layers), HDR,
-  DPX, Cineon, TIFF, PSD, PNG, JPEG, WebP, TGA, BMP, GIF, ICO, JPEG 2000,
+- **Reads what a VFX pipeline produces** — EXR (multi-part, AOV layers), Houdini RAT
+  (native TBF v5/v6 & classic), HDR, DPX, Cineon, TIFF, PSD, PNG, JPEG, WebP, TGA, BMP, GIF, ICO, JPEG 2000,
   DDS, SGI, IFF, PIC, RLA, Ptex and camera RAW.
-- **Color managed** — OpenColorIO display/view transforms, exposure (stops)
-  and gamma, all evaluated on the GPU.
-- **AOV / layer picker** — every named layer of a multi-channel EXR can be
-  isolated without leaving the viewer.
+- **Color managed** — OpenColorIO display/view transforms, automatic EXR chromaticities detection
+  (ACES2065-1, ACEScg, Rec.2020, P3-D65, Rec.709), exposure (stops) and gamma, all evaluated on the GPU.
+- **AOV / layer picker** — every named layer of a multi-channel EXR or multi-plane RAT (cube maps, passes)
+  can be isolated without leaving the viewer.
 - **Comparison** — A/B wipe (vertical, horizontal), onion skin, per-image
   channel isolation.
 - **Pixel probe** — exact float RGBA values, luminance, hex code, normalized
@@ -22,8 +24,8 @@ node graph: just the image, at full quality, immediately.
 - **360° panorama** — equirectangular navigation with FOV control, plus an
   optional lookdev rig (chrome sphere, matte 18 % grey sphere, Macbeth color
   checker) that can be sized and moved to any corner.
-- **Folder navigation** — thumbnails decoded in the background, no freeze on
-  large directories, EXIF orientation handled.
+- **Folder navigation** — thumbnails decoded in the background for all formats (including EXR, RAT, HDR, DPX),
+  no freeze on large directories, EXIF orientation handled.
 - **Dockable UI** — six authentic DCC themes (USDView, Maya, Blender, Nuke,
   Houdini, 3ds Max), floating transport HUD, saved layouts.
 - **HDR aware** — textures are uploaded as RGBA16F; images larger than
@@ -31,7 +33,7 @@ node graph: just the image, at full quality, immediately.
 
 ## Supported formats
 
-EXR · HDR · DPX · Cineon · TIFF · PSD · PNG · JPEG · WebP · TGA · BMP · GIF
+EXR · RAT (Houdini) · HDR · DPX · Cineon · TIFF · PSD · PNG · JPEG · WebP · TGA · BMP · GIF
 · ICO · JPEG 2000 · DDS · SGI · IFF · PIC · RLA · Ptex · RAW
 
 ## Download

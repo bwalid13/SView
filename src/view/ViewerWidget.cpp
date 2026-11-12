@@ -505,8 +505,10 @@ ViewerWidget::ViewerWidget(ViewerViewModel* vm, QWidget* parent)
     updateOsd();
 
     connect(m_vm, &ViewerViewModel::imageChanged, this, &ViewerWidget::updateOsd);
+    connect(m_vm, &ViewerViewModel::transformChanged, this, &ViewerWidget::updateOsd);
     connect(m_vm, &ViewerViewModel::displayChanged, this, &ViewerWidget::updateOsd);
     connect(m_vm, &ViewerViewModel::overlayChanged, this, &ViewerWidget::updateOsd);
+    connect(m_vm, &ViewerViewModel::mode360Changed, this, &ViewerWidget::updateOsd);
 
     m_currentTransform = { m_vm ? m_vm->flipH() : false,
                            m_vm ? m_vm->flipV() : false,
@@ -1428,6 +1430,18 @@ void ViewerWidget::updateOsd()
     if (!m_osdLabel)
         return;
     if (m_osdVisible) {
+        const bool hasErr = (m_vm && !m_vm->error().isEmpty() && !m_vm->image());
+        if (hasErr) {
+            m_osdLabel->setStyleSheet(QStringLiteral(
+                "QLabel { color: #ffb4b4; background: rgba(45, 16, 16, 215);"
+                " border: 1px solid rgba(255, 100, 100, 90); border-radius: 5px;"
+                " padding: 5px 12px; font-family: Consolas, 'DejaVu Sans Mono', monospace; font-size: 11px; }"));
+        } else {
+            m_osdLabel->setStyleSheet(QStringLiteral(
+                "QLabel { color: #e4e4e4; background: rgba(18, 18, 18, 195);"
+                " border: 1px solid rgba(255, 255, 255, 32); border-radius: 5px;"
+                " padding: 5px 12px; font-family: Consolas, 'DejaVu Sans Mono', monospace; font-size: 11px; }"));
+        }
         m_osdLabel->setText(osdText());
         m_osdLabel->adjustSize();
         m_osdLabel->show();
@@ -1439,36 +1453,66 @@ void ViewerWidget::updateOsd()
 
 QString ViewerWidget::osdText() const
 {
-    if (!m_vm || !m_vm->image() || m_vm->image()->path.isEmpty()) {
+    if (!m_vm) {
         return QStringLiteral("No Media");
     }
 
-    QString fileName = QFileInfo(m_vm->image()->path).fileName();
-    if (m_playback && m_playback->sequence() && m_playback->sequence()->isSequence()) {
-        const int frameNum = m_playback->currentFrameNumber();
-        fileName += QStringLiteral(" [frame %1]").arg(frameNum);
+    if (!m_vm->image() || m_vm->image()->path.isEmpty()) {
+        if (!m_vm->error().isEmpty()) {
+            return QStringLiteral("Error: %1").arg(m_vm->error());
+        }
+        return QStringLiteral("No Media  |  Drop an image or folder, or press Ctrl+O");
     }
 
-    double fps = 24.0;
-    if (m_playback) {
-        fps = m_playback->fps();
+    const auto& img = m_vm->image();
+    QString fileName = QFileInfo(img->path).fileName();
+    if (m_vm->hasMultipleFolderImages() && m_vm->folderIndex() >= 0) {
+        fileName += QStringLiteral(" [%1/%2]").arg(m_vm->folderIndex() + 1).arg(m_vm->folderCount());
     }
 
-    QString cs = m_vm ? m_vm->currentColorSpace() : QStringLiteral("sRGB");
+    const QString dims = QStringLiteral("%1x%2 (%3ch)")
+                             .arg(img->width)
+                             .arg(img->height)
+                             .arg(img->sourceChannels);
+
+    QString cs = m_vm->currentColorSpace();
     if (cs.isEmpty()) {
         cs = QStringLiteral("sRGB");
     }
-
-    QString reference = QStringLiteral("%1 | %2 fps | %3")
-        .arg(fileName)
-        .arg(QString::number(fps, 'f', 1))
-        .arg(cs);
-
-    // Signale une réduction de texture (image plus grande que le GPU).
-    if (m_textureScale < 0.999f) {
-        reference += QStringLiteral(" | proxy %1%").arg(int(m_textureScale * 100.0f));
+    if (!img->sourceColorSpace.isEmpty()) {
+        cs = QStringLiteral("%1 -> %2").arg(img->sourceColorSpace, cs);
     }
-    return reference;
+
+    const int zoomPct = std::max(1, int(std::round(m_vm->zoom() * 100.0)));
+
+    QStringList parts;
+    parts << fileName;
+    parts << dims;
+    if (!img->formatName.isEmpty()) {
+        parts << img->formatName.toUpper();
+    }
+    if (!m_vm->currentAov().isEmpty() && m_vm->currentAov().compare(QLatin1String("RGBA"), Qt::CaseInsensitive) != 0) {
+        parts << QStringLiteral("AOV: %1").arg(m_vm->currentAov());
+    }
+    parts << cs;
+    if (!m_vm->is360Mode()) {
+        parts << QStringLiteral("%1%").arg(zoomPct);
+    } else {
+        parts << QStringLiteral("360°");
+    }
+    if (std::abs(m_vm->exposureStops()) > 0.005) {
+        parts << QStringLiteral("EV %1%2")
+                     .arg(m_vm->exposureStops() >= 0.0 ? QStringLiteral("+") : QString())
+                     .arg(QString::number(m_vm->exposureStops(), 'f', 1));
+    }
+    if (std::abs(m_vm->gamma() - 1.0) > 0.005) {
+        parts << QStringLiteral("γ %1").arg(QString::number(m_vm->gamma(), 'f', 2));
+    }
+    if (m_textureScale < 0.999f) {
+        parts << QStringLiteral("proxy %1%").arg(int(m_textureScale * 100.0f));
+    }
+
+    return parts.join(QStringLiteral("  |  "));
 }
 
 void ViewerWidget::setFloatingControlDock(FloatingControlDock* dock)
