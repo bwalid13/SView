@@ -108,6 +108,8 @@ if(MSVC)
     target_compile_definitions(sview PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN _USE_MATH_DEFINES)
 endif()
 
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+
 qt_add_executable(sview_tests
     tests/test_main.cpp
     src/model/ImageData.h
@@ -1597,5 +1599,7 @@ if(MSVC)
     target_compile_options(sview_empirical_m4_challenger_tests PRIVATE /utf-8 /permissive- /W3)
     target_compile_definitions(sview_empirical_m4_challenger_tests PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN _USE_MATH_DEFINES)
 endif()
+
+endif() # EXISTS tests
 
 

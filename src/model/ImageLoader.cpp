@@ -1115,15 +1115,32 @@ LoadResult loadImage(const QString& path, const QString& aovName)
         const SourceSpace space = guessSpace(src);
         const QString formatName = QString::fromUtf8(src.file_format_name());
 
-        // Orientation EXIF : reorient() ne duplique les pixels que si une
-        // rotation est réellement demandée. Sinon une copie superficielle suffit.
+        // Si l'image contient des échantillons Deep (Deep EXR), l'aplatir en buffer 2D
+        // pour permettre l'affichage, l'inspection AOV et les vignettes sans crash get_pixels.
+        const bool isDeepImage = src.deep();
         OIIO::ImageBuf buf = src;
-        if (src.spec().get_int_attribute("Orientation", 1) != 1) {
-            buf = OIIO::ImageBufAlgo::reorient(src);
-            if (buf.has_error()) {
-                res.error = QString::fromStdString(buf.geterror());
+        if (isDeepImage) {
+            OIIO::ImageBuf flat = OIIO::ImageBufAlgo::flatten(src);
+            if (flat.has_error() || !flat.initialized()) {
+                res.error = QStringLiteral("Cannot flatten deep image: %1")
+                                .arg(QString::fromStdString(flat.geterror()));
                 return res;
             }
+            buf = flat;
+        }
+
+        // Orientation EXIF : reorient() ne duplique les pixels que si une
+        // rotation est réellement demandée. Sinon une copie superficielle suffit.
+        if (buf.spec().get_int_attribute("Orientation", 1) != 1) {
+            OIIO::ImageBuf reoriented = OIIO::ImageBufAlgo::reorient(buf);
+            if (!reoriented.has_error()) {
+                buf = reoriented;
+            }
+        }
+
+        if (buf.deep()) {
+            res.error = QStringLiteral("Deep images cannot be displayed directly as 2D buffers");
+            return res;
         }
 
         const OIIO::ImageSpec& spec = buf.spec();
@@ -1281,6 +1298,9 @@ LoadResult loadImage(const QString& path, const QString& aovName)
         img->metadata.insert(QStringLiteral("Color Space"),
                              (space == SourceSpace::SceneLinear) ? QStringLiteral("Scene-Linear")
                                                                  : QStringLiteral("sRGB"));
+        if (isDeepImage) {
+            img->metadata.insert(QStringLiteral("Deep Image"), QStringLiteral("Yes (Flattened for 2D View)"));
+        }
         if (!detectedSpace.isEmpty()) {
             img->metadata.insert(QStringLiteral("Source Color Space"), detectedSpace);
         }
@@ -1334,18 +1354,26 @@ bool saveImage(const QString& inputPath, const QString& outputPath, bool halfRes
             return bufFromImg.write(outNative);
         }
 
+        OIIO::ImageBuf buf = src;
+        if (src.deep()) {
+            OIIO::ImageBuf flat = OIIO::ImageBufAlgo::flatten(src);
+            if (!flat.has_error() && flat.initialized()) {
+                buf = flat;
+            }
+        }
+
         if (halfRes) {
-            const int newW = std::max(1, src.spec().width / 2);
-            const int newH = std::max(1, src.spec().height / 2);
-            OIIO::ROI roi(0, newW, 0, newH, 0, 1, 0, src.spec().nchannels);
-            OIIO::ImageBuf dst = OIIO::ImageBufAlgo::resize(src, "", 0.0f, roi);
+            const int newW = std::max(1, buf.spec().width / 2);
+            const int newH = std::max(1, buf.spec().height / 2);
+            OIIO::ROI roi(0, newW, 0, newH, 0, 1, 0, buf.spec().nchannels);
+            OIIO::ImageBuf dst = OIIO::ImageBufAlgo::resize(buf, "", 0.0f, roi);
             if (dst.has_error()) {
                 return false;
             }
             return dst.write(outNative);
         }
 
-        return src.write(outNative);
+        return buf.write(outNative);
     } catch (...) {
         return false;
     }
